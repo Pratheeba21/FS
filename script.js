@@ -1,57 +1,51 @@
-const taskInput = document.getElementById("taskInput");
-
-const addBtn = document.getElementById("addBtn");
-
-const taskList = document.getElementById("taskList");
+const taskInput = document.getElementById("inp");
+const addBtn = document.getElementById("add_button");
+const taskList = document.getElementById("task_list");
 
 addBtn.addEventListener("click", function () {
+  const taskText = taskInput.value;
 
-    const taskText = taskInput.value;
+  if (taskText === "") {
+    alert("Please enter a task");
+    return;
+  }
 
-    if (taskText === "") {
-        alert("Please enter a task");
-        return;
-    }
+  // Create list item
+  const li = document.createElement("li");
 
-    const li = document.createElement("li");
+  // Complete button (left)
+  const completeBtn = document.createElement("div");
+  completeBtn.className = "complete-btn";
 
-    const leftDiv = document.createElement("div");
-    leftDiv.className = "task-left";
+  // Task text (center)
+  const textSpan = document.createElement("span");
+  textSpan.className = "task-text";
+  textSpan.textContent = taskText;
 
-    const completeBtn = document.createElement("div");
-    completeBtn.className = "complete-btn";
+  // Delete button (right)
+  const deleteBtn = document.createElement("button");
+  deleteBtn.className = "delete-btn";
+  deleteBtn.textContent = "Delete";
 
-    const textSpan = document.createElement("span");
-    textSpan.className = "task-text";
-    textSpan.textContent = taskText;
+  // Complete logic
+  completeBtn.addEventListener("click", function () {
+    completeBtn.classList.toggle("checked");
+    textSpan.classList.toggle("completed");
+    completeBtn.textContent = completeBtn.textContent === "✓" ? "" : "✓";
+  });
 
-    completeBtn.addEventListener("click", function () {
+  // Delete logic
+  deleteBtn.addEventListener("click", function () {
+    taskList.removeChild(li);
+  });
 
-        if (completeBtn.textContent === "✓") {
-            completeBtn.textContent = "";
-        } else {
-            completeBtn.textContent = "✓";
-        }
+  // Append directly to li
+  li.appendChild(completeBtn);
+  li.appendChild(textSpan);
+  li.appendChild(deleteBtn);
 
-        completeBtn.classList.toggle("checked");
-        textSpan.classList.toggle("completed");
-    });
+  // Add to list
+  taskList.appendChild(li);
 
-    leftDiv.appendChild(completeBtn);
-    leftDiv.appendChild(textSpan);
-
-    const deleteBtn = document.createElement("button");
-    deleteBtn.className = "delete-btn";
-    deleteBtn.textContent = "Delete";
-
-    deleteBtn.addEventListener("click", function () {
-        taskList.removeChild(li);
-    });
-
-    li.appendChild(leftDiv);
-    li.appendChild(deleteBtn);
-
-    taskList.appendChild(li);
-
-    taskInput.value = "";
+  taskInput.value = "";
 });
